@@ -17,22 +17,35 @@ function Signup() {
     });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (event) => {
+  event.preventDefault();
 
-    if (
-      !formData.f_name ||
-      !formData.l_name ||
-      !formData.username ||
-      !formData.password
-    ) {
-      setMessage("Please fill in all fields.");
-      return;
-    }
+  if (
+    !formData.f_name ||
+    !formData.l_name ||
+    !formData.username ||
+    !formData.password
+  ) {
+    setMessage("Please fill in all fields.");
+    return;
+  }
 
-    console.log(formData);
-    setMessage("Signup form is valid.");
-  };
+  try {
+    const response = await fetch("http://localhost:3000/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await response.json();
+
+    setMessage(data.message);
+  } catch (error) {
+    setMessage("Unable to connect to the server.");
+  }
+};
 
   return (
     <div>
