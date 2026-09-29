@@ -12,6 +12,9 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+// How the backend communicates with MongoDB:
+// Mongoose connects the Express backend to the MongoDB Atlas database
+// using the connection string stored in the .env file.
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
@@ -21,8 +24,8 @@ mongoose
     console.error("MongoDB connection error:", error);
   });
 
-  //signup
-
+// How Express handles Signup requests:
+// This route receives Signup data sent by the React frontend.
 app.post("/signup", async (req, res) => {
   try {
     const { f_name, l_name, username, password } = req.body;
@@ -33,6 +36,8 @@ app.post("/signup", async (req, res) => {
       });
     }
 
+    // How the backend communicates with MongoDB:
+    // Searches MongoDB to see if this username already exists.
     const existingUser = await User.findOne({ username });
 
     if (existingUser) {
@@ -41,6 +46,7 @@ app.post("/signup", async (req, res) => {
       });
     }
 
+    // Creates a new MongoDB user document.
     const newUser = new User({
       f_name,
       l_name,
@@ -48,6 +54,7 @@ app.post("/signup", async (req, res) => {
       password
     });
 
+    // Saves the new user document in MongoDB.
     await newUser.save();
 
     res.status(201).json({
@@ -62,8 +69,8 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-//login
-
+// How Express handles Login requests:
+// This route receives the username and password from the React Login form.
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -74,6 +81,8 @@ app.post("/login", async (req, res) => {
       });
     }
 
+    // How the backend communicates with MongoDB:
+    // Searches the database for a user with the supplied username.
     const user = await User.findOne({ username });
 
     if (!user) {
@@ -82,6 +91,7 @@ app.post("/login", async (req, res) => {
       });
     }
 
+    // Compares the supplied password with the stored password.
     if (user.password !== password) {
       return res.status(400).json({
         message: "Incorrect password."

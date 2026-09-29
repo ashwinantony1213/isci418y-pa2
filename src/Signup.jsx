@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 function Signup() {
+  // How form data is stored in React:
+  // React state stores the values entered into each Signup field.
   const [formData, setFormData] = useState({
     f_name: "",
     l_name: "",
@@ -8,8 +10,10 @@ function Signup() {
     password: ""
   });
 
+  // React state also stores feedback messages shown to the user.
   const [message, setMessage] = useState("");
 
+  // Updates React state whenever the user types into a form field.
   const handleChange = (event) => {
     setFormData({
       ...formData,
@@ -18,35 +22,39 @@ function Signup() {
   };
 
   const handleSubmit = async (event) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  if (
-    !formData.f_name ||
-    !formData.l_name ||
-    !formData.username ||
-    !formData.password
-  ) {
-    setMessage("Please fill in all fields.");
-    return;
-  }
+    if (
+      !formData.f_name ||
+      !formData.l_name ||
+      !formData.username ||
+      !formData.password
+    ) {
+      setMessage("Please fill in all fields.");
+      return;
+    }
 
-  try {
-    const response = await fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
-    });
+    try {
+      // How the frontend sends requests to the backend:
+      // fetch() sends the Signup form data to the Express /signup route
+      // as a POST request containing JSON.
+      const response = await fetch("http://localhost:3000/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
-    const data = await response.json();
+      const data = await response.json();
+      setMessage(data.message);
+    } catch (error) {
+      setMessage("Unable to connect to the server.");
+    }
+  };
 
-    setMessage(data.message);
-  } catch (error) {
-    setMessage("Unable to connect to the server.");
-  }
-};
-
+  // How the React interface is organized:
+  // This component contains the Signup interface and its form.
   return (
     <div>
       <h1>Signup</h1>

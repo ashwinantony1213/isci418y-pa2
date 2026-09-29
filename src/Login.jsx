@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 function Login() {
+    //how form data is stored in React:
+    // React state stores the username and password entered by the user.
   const [formData, setFormData] = useState({
     username: "",
     password: ""
@@ -24,6 +26,8 @@ function Login() {
     }
 
     try {
+      // How the frontend sends requests to the backend:
+      // Sends the Login credentials to the Express /login route.
       const response = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: {
@@ -39,6 +43,8 @@ function Login() {
     }
   };
 
+  // How the React interface is organized:
+  // This component contains the Login interface and its form.
   return (
     <div>
       <h1>Login</h1>
