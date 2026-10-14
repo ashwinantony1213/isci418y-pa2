@@ -1,5 +1,6 @@
 import Signup from "./Signup";
 import Login from "./Login";
+import Project from "./Projects";
 
 function App() {
   // How the React interface is organized:
@@ -9,6 +10,7 @@ function App() {
     <div>
       <Signup />
       <Login />
+      <Project />
     </div>
   );
 }
